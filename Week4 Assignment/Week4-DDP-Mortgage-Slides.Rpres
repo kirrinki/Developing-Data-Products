@@ -1,0 +1,75 @@
+DDP - Simple Mortgage Calculator
+========================================================
+author: Srinivasa Irrinki
+date: August 12, 2017
+autosize: true
+
+Simple Mortgage Calculator.
+========================================================
+
+
+
+The App calculates the Mortgage Amount by given the Principal Amount, Interest Rate rate and the Loan terms. The App is developed using Shiny
+
+- Amount is the principal amount eg: Loan taken
+- Rate is annual interest rate in percentage.
+- Date range specifies the period within which the interest is to be computed.
+- Day Convention specifies the number of days to be considered in an year.
+
+App can be accessed by [Clicking Here](https://kirrinki.shinyapps.io/developing_data_products_-_week4_assignment/).
+
+App Code can be accessed by [Clicking Here](https://github.com/kirrinki/Developing-Data-Products).
+
+Slide With ui.R Code
+========================================================
+
+```{r}
+
+library(shiny)
+
+##UI for Mortgage Amount Calculator
+
+shinyUI(fluidPage(
+  titlePanel("Simple Mortgage Amount Calculator"),
+  sidebarLayout(
+    sidebarPanel(
+      numericInput("principal",label = h3("Principal amount"), value=0),
+      sliderInput("rate", label = h3("Interest Rate(%)"), min = 0, 
+                  max = 10, value = 0, step=0.01),
+      selectInput("basis", label = h3("Loan Terms (No Of Years)"), 
+                  choices = list("5" = 5, "10" = 10,"15" = 15,"20" = 20, "30" = 30), 
+                  selected = 1),
+      submitButton("Submit")
+        
+    ),
+    mainPanel(
+      h3("Mortgage Amount Per Month:"),
+      h3(textOutput("interest"))
+    )
+  )
+))
+```
+
+Server.R Code
+========================================================
+
+```{r}
+library(shiny)
+shinyServer(function(input,output) {
+  output$interest <- reactive({
+       P <- as.numeric(input$principal)
+       N <- as.numeric(input$basis) * 12
+       R <- as.numeric((input$rate / 12)/100)
+         round( (R * P)/(1 - '^'((1 + R),-N)),2 )
+  })
+})
+
+```
+Slide with App
+========================================================
+```{r}
+library(png)
+library(grid)
+appimg <- readPNG('C:/Users/admin_ithw/Desktop/Data Science Assignments/Developing Data Products/Capture.png')
+grid.raster(appimg)
+```
